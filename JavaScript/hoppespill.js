@@ -29,7 +29,7 @@ function startSpill(){    //Funksjon som starter spillet. Ingen parametre
 
 /**
  * denne funksjonen skal feste et karakter-objekt til en HTML-div element.
- * @param {string} navnPaaKarakter navnet skal settes som ${navn}Div og id. 
+ * @param {string} navnPaaKarakter navnet skal settes som ${navn}Div og id-en til den spesifikke div-en. 
  * @param {object} obj #objektet til karakteren som skal linkes til DIV-en.
  */
 function kobleBildeTilDiv(navnPaaKarakter, obj) {

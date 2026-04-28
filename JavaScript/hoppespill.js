@@ -1,15 +1,16 @@
 //#region Globale Variabler
-let startKnapp = document.getElementById("startKnapp")
-let startMeny = document.getElementById("startSide")
+
 //#endregion
-startKnapp.addEventListener("click",startSpill);
 
 //#region Elementer
+let startKnapp = document.getElementById("startKnapp");
+let startMeny = document.getElementById("startSide");
 
 //#endregion
 
 
 //#region DOM
+startKnapp.addEventListener("click",startSpill);
 
 //#endregion
 
@@ -18,4 +19,6 @@ startKnapp.addEventListener("click",startSpill);
 function startSpill(){    //Funksjon som starter spillet. Ingen parametre
   startMeny.style.display = "none"
 }
+
+
 //#endregion

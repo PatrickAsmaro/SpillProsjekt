@@ -1,7 +1,7 @@
 //#region Globale Variabler
 let karakter1 ={
-  bildet1 : "bildetSti1",
-  evne1 : "evne",
+  bildet : "bildetSti1",
+  evne : "evne",
   liv : 3,
   x: 0,
   y: 0,
@@ -10,6 +10,7 @@ let karakter1 ={
 //#endregion
 
 //#region Elementer
+let bodyEl = document.querySelector("body");
 let startKnappEl = document.getElementById("startKnapp");
 let startMenyEl = document.getElementById("startSide");
 
@@ -19,8 +20,7 @@ let startMenyEl = document.getElementById("startSide");
 //#region DOM
 startKnappEl.addEventListener("click",startSpill);
 
-let k1Div = document.createElement("div");
-k1Div.id = "karakter1Navn"
+
 //#endregion
 
 
@@ -30,11 +30,19 @@ function startSpill(){    //Funksjon som starter spillet. Ingen parametre
 };
 
 /**
- * denne funksjonen skal feste en karakter til en html DIV
- * @param {object} obj #objektet til karakteren som skal linkes til DIV-en
- * @param {HTMLElement} divisjon# et HTML-div element man skal feste objektet til 
+ * denne funksjonen skal feste et karakter-objekt til en HTML-div element.
+ * @param {string} navnPaaKarakter navnet skal settes som ${navn}Div og id. 
+ * @param {object} obj #objektet til karakteren som skal linkes til DIV-en.
  */
-function lagKarakter(obj,divisjon) {
+function lagKarakter(navnPaaKarakter, obj, divisjon) {
+    //lage en div og feste bildet av karakteren til div-en
+    let div = document.createElement("div");
+    div.id = navnPaaKarakter;
+    div.style.display = "none";
+    div.img = obj.bilde;
+    bodyEl.appendChild(div);
 
-};
+
+
+}
 //#endregion

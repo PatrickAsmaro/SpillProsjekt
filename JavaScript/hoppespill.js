@@ -2,6 +2,7 @@
 let karakter1 ={
   bildet1 : "bildetSti1",
   evne1 : "evne",
+  liv : 3,
   x: 0,
   y: 0,
 };
@@ -18,7 +19,8 @@ let startMenyEl = document.getElementById("startSide");
 //#region DOM
 startKnappEl.addEventListener("click",startSpill);
 
-
+let k1Div = document.createElement("div");
+k1Div.id = "karakter1Navn"
 //#endregion
 
 

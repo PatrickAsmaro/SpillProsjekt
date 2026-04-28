@@ -1,11 +1,9 @@
 //#region Globale Variabler
-let karakter1 ={
-  bildet : "bildetSti1",
-  evne : "evne",
-  liv : 3,
-  x: 0,
-  y: 0,
-};
+let karakterer = [
+  {karakter : karakter1, evne : evne1, liv : 3, bilde : bildeSti},
+  {karakter : karakter2, evne : evne2, liv : 3, bilde : bildeSti},
+  {karakter : karakter3, evne : evne3, liv : 3, bilde : bildeSti}
+]
 
 //#endregion
 
@@ -34,15 +32,15 @@ function startSpill(){    //Funksjon som starter spillet. Ingen parametre
  * @param {string} navnPaaKarakter navnet skal settes som ${navn}Div og id. 
  * @param {object} obj #objektet til karakteren som skal linkes til DIV-en.
  */
-function lagKarakter(navnPaaKarakter, obj, divisjon) {
-    //lage en div og feste bildet av karakteren til div-en
+function kobleBildeTilDiv(navnPaaKarakter, obj) {
     let div = document.createElement("div");
     div.id = navnPaaKarakter;
     div.style.display = "none";
     div.img = obj.bilde;
     bodyEl.appendChild(div);
+};
 
+function oppdaterSpill() {
 
-
-}
+};
 //#endregion

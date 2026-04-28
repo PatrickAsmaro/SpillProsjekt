@@ -18,6 +18,7 @@ let startMenyEl = document.getElementById("startSide");
 //#region DOM
 startKnappEl.addEventListener("click",startSpill);
 
+
 //#endregion
 
 

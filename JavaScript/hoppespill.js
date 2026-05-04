@@ -1,16 +1,16 @@
 //#region Globale Variabler
 let karakterer = [
-  {karakter : "karakter1", evne : evne1, liv : 3, bilde : bildeSti},
-  {karakter : "karakter2", evne : evne2, liv : 3, bilde : bildeSti},
-  {karakter : "karakter3", evne : evne3, liv : 3, bilde : bildeSti}
+  {navn : "test", evne : evne1, liv : 3, bilde : "../Bilder/testKarakter.jpg"},
+  {navn : "karakter2", evne : evne2, liv : 3, bilde : "bildeSti"},
+  {navn : "karakter3", evne : evne3, liv : 3, bilde : "bildeSti"}
 ]
 
 //#endregion
 
 //#region Elementer
 let bodyEl = document.querySelector("body");
-let startKnappEl = document.getElementById("startKnapp");
-let startMenyEl = document.getElementById("startSide");
+let startKnappEl = document.querySelector("#startKnapp");
+let startMenyEl = document.querySelector("#startSide");
 
 //#endregion
 
@@ -28,17 +28,17 @@ startKnappEl.addEventListener("click",startSpill);
  */
 function startSpill(){
   startMenyEl.style.display = "none";
-
+  kobleBildeTilDiv(karakterer[0]);
+  console.log("du trykket knappen");
 };
 
 /**
  * denne funksjonen skal feste et karakter-objekt til et HTML-div element.
- * @param {string} navnPaaKarakter navnet skal settes som ${navn}Div og id-en til den spesifikke div-en. 
  * @param {object} obj #objektet til karakteren som skal linkes til DIV-en.
  */
-function kobleBildeTilDiv(navnPaaKarakter, obj) {
+function kobleBildeTilDiv(obj) {
     let div = document.createElement("div");
-    div.id = navnPaaKarakter;
+    div.id = obj.navn;
     div.style.display = "none";
     div.img = obj.bilde;
     bodyEl.appendChild(div);

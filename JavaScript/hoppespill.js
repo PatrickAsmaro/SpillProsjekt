@@ -2,7 +2,7 @@
 let y = 0;
 let fartY = 0;
 let paaBakken = true;
-let aktivKarakterEl;
+let aktivKarakter;
 
 let karakterer = [
   { navn: "test", evne: "evne1", liv: 3, bilde: "../Bilder/testKarakter.jpg" },
@@ -32,7 +32,7 @@ function startSpill() {
   }
 
   visDiv(karakterer[0]);
-  aktivKarakterEl = document.querySelector("#" + karakterer[0].navn);
+  aktivKarakter = document.querySelector("#" + karakterer[0].navn);
 
   oppdaterSpill();
 }
@@ -84,8 +84,8 @@ function oppdaterSpill() {
     paaBakken = true;
   }
 
-  if (aktivKarakterEl) {
-    aktivKarakterEl.style.bottom = y + "px";
+  if (aktivKarakter) {
+    aktivKarakter.style.bottom = y + "px";
   }
 
   requestAnimationFrame(oppdaterSpill);

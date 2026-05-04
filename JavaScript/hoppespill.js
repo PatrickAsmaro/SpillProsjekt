@@ -1,8 +1,8 @@
 //#region Globale Variabler
 let karakterer = [
-  {karakter : karakter1, evne : evne1, liv : 3, bilde : bildeSti},
-  {karakter : karakter2, evne : evne2, liv : 3, bilde : bildeSti},
-  {karakter : karakter3, evne : evne3, liv : 3, bilde : bildeSti}
+  {karakter : "karakter1", evne : evne1, liv : 3, bilde : bildeSti},
+  {karakter : "karakter2", evne : evne2, liv : 3, bilde : bildeSti},
+  {karakter : "karakter3", evne : evne3, liv : 3, bilde : bildeSti}
 ]
 
 //#endregion
@@ -23,12 +23,16 @@ startKnappEl.addEventListener("click",startSpill);
 
 
 //#region Funksjoner
-function startSpill(){    //Funksjon som starter spillet. Ingen parametre
-  startMeny.style.display = "none";
+/**
+ *Funksjon som starter spillet. Ingen parametre
+ */
+function startSpill(){
+  startMenyEl.style.display = "none";
+
 };
 
 /**
- * denne funksjonen skal feste et karakter-objekt til en HTML-div element.
+ * denne funksjonen skal feste et karakter-objekt til et HTML-div element.
  * @param {string} navnPaaKarakter navnet skal settes som ${navn}Div og id-en til den spesifikke div-en. 
  * @param {object} obj #objektet til karakteren som skal linkes til DIV-en.
  */

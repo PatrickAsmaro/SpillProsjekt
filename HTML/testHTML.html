@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <title>Test av hopp-funksjon</title>
+</head>
+<body>
+  <h1>Test hopp-funksjonen</h1>
+  <p id="status">Status: Ikke hoppet ennå</p>
+
+  <script>
+    let fartY = 0;
+    let paaBakken = true;
+    let statusEl = document.querySelector("#status");
+
+    document.addEventListener("keydown", hopp);
+
+    /**
+     * Funksjonen hopp() starter et hopp når mellomrom trykkes.
+     * Betingelser:
+     * - event.code må være "Space"
+     * - paaBakken må være true
+     * Endrer globale variabler fartY og paaBakken.
+     */
+    function hopp(event) {
+      if (event.code === "Space" && paaBakken) {
+        event.preventDefault();
+        fartY = 15;
+        paaBakken = false;
+        statusEl.textContent = "Status: Hoppet! fartY = " + fartY + ", paaBakken = " + paaBakken;
+        console.log("Hopp startet! fartY:", fartY, "paaBakken:", paaBakken);
+      } else if (event.code === "Space") {
+        console.log("Kan ikke hoppe - allerede i lufta");
+      }
+    }
+  </script>
+</body>
+</html>

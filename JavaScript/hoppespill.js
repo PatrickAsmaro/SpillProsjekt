@@ -25,10 +25,6 @@ startKnappEl.addEventListener("click", startSpill);
 /**
  * Starter spillet ved å skjule startmenyen, legge til en keydown-event listener for hopp, koble bilder til karakter-divs, vise den første karakteren og starte spilloppdateringen.
  * 
- * Betingelser:
- * - startMenyEl må eksistere i DOM
- * - document må eksistere
- * - hopp-funksjonen må være definert
  */
 function startSpill() {
   startMenyEl.style.display = "none";
@@ -138,14 +134,62 @@ function oppdaterSpill() {
   requestAnimationFrame(oppdaterSpill);
 }
 
-function lagFiender() {
+/**
+ * Plasserer en fiende på skjermen med en tilfeldig sjanse for størrelse.
+ * Endrer:
+ * - Legger til et fiendeobjekt i fienderArray med egenskaper img, x, y, width, height basert på en tilfeldig sjanse.
+ * 
+ * Sjanser:
+ * - 10% sjanse for en stor fiende (fiende3)
+ * - 30% sjanse for en medium fiende (fiende2)
+ * - 60% sjanse for en liten fiende (fiende1)
+ * 
+ */
+function plasserFiende() {
+  let fiende = {
+    img : null,
+    x : fiendeX,
+    y : fiendeY,
+    width : null,
+    height : fiendeHoyde
+  }
 
-};
+  let spawnSjanse = Math.floor(Math.random() * 10 + 1)
 
+  if(spawnSjanse > 9){         //10% sjanse for en stor fiende
+    fiende.img = fiende3Img;
+    fiende.width = fiende3Bredde
+    fienderArray.push(fiende)
+  }
+   else if (spawnSjanse >= 7){    //30% sjanse for en medium fiende
+    fiende.img = fiende2Img;
+    fiende.width = fiende2Bredde
+    fienderArray.push(fiende)
+  }
+   else if (spawnSjanse <= 6){    //60% sjanse for en liten fiende
+    fiende.img = fiende1Img;
+    fiende.width = fiende1Bredde
+    fienderArray.push(fiende)
+  }
+}
+
+
+/**
+ * Sjekker for kollisjon mellom spilleren og fiender.
+ * 
+ */
 function kollisjon() {
-
+  for(let i = 0; i < fienderArray.length; i++){
+    let fiende = fienderArray[i];
+    if(aktivKarakter && fiende.x < 150 && fiende.x + fiende.width > 100 && y < fiende.y + fiende.height){
+      // Kollisjon oppdaget, håndter skade eller spill-over her
+      console.log("Kollisjon med fiende!");
+      // Fjern fienden fra arrayet etter kollisjon
+      fienderArray.splice(i, 1);
+      i--; // Juster indeksen etter fjerning
+    }
+  }
 };
-
 
 
 

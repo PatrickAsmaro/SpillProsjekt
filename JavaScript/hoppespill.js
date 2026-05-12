@@ -22,6 +22,14 @@ startKnappEl.addEventListener("click", startSpill);
 //#endregion
 
 //#region Funksjoner
+/**
+ * Starter spillet ved å skjule startmenyen, legge til en keydown-event listener for hopp, koble bilder til karakter-divs, vise den første karakteren og starte spilloppdateringen.
+ * 
+ * Betingelser:
+ * - startMenyEl må eksistere i DOM
+ * - document må eksistere
+ * - hopp-funksjonen må være definert
+ */
 function startSpill() {
   startMenyEl.style.display = "none";
 
@@ -37,6 +45,12 @@ function startSpill() {
   oppdaterSpill();
 }
 
+/**
+ * Kobler et bilde til et div-element basert på karakterobjektet.
+ * 
+ * @param {Object} obj - Karakterobjektet med egenskapen navn og bilde
+ * @returns {HTMLElement} - Det opprettede div-elementet
+ */
 function kobleBildeTilDiv(obj) {
   if (document.querySelector("#" + obj.navn)) {
     return;
@@ -58,6 +72,19 @@ function kobleBildeTilDiv(obj) {
   bodyEl.appendChild(div);
 }
 
+
+/**
+ * Viser en div-element på skjermen basert på karakterobjektet.
+ * 
+ * Betingelser:
+ * - obj.navn må eksistere (karakteren må ha et navn)
+ * - Div-elementet med id lik obj.navn må eksistere i DOM
+ * 
+ * Endrer:
+ * - style.display til "block" (gjør elementet synlig)
+ * 
+ * @param {Object} obj - Karakterobjektet med egenskapen navn
+ */
 function visDiv(obj) {
   let divEl = document.querySelector("#" + obj.navn);
 

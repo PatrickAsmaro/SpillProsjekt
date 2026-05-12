@@ -90,4 +90,16 @@ function oppdaterSpill() {
 
   requestAnimationFrame(oppdaterSpill);
 }
+
+function lagFiender() {
+
+};
+
+function kollisjon() {
+
+};
+
+
+
+
 //#endregion

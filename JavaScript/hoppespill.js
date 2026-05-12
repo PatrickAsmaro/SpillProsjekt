@@ -4,11 +4,40 @@ let fartY = 0;
 let paaBakken = true;
 let aktivKarakter;
 
+//Spillbrett
+let brett;
+let brettBredde = 750;
+let brettHoyde = 250;
+
+//Spillkarakter
+let karakterBredde = 80
+let karakterHoyde = 86
+let karakterX = 50
+let karakterY = brettHoyde - karakterY;
+let karakterImg;
+
 let karakterer = [
   { navn: "test", evne: "evne1", liv: 3, bilde: "../Bilder/testKarakter.jpg" },
   { navn: "karakter2", evne: "evne2", liv: 3, bilde: "bildeSti" },
   { navn: "karakter3", evne: "evne3", liv: 3, bilde: "bildeSti" }
 ];
+
+//fiender
+let fienderArray = []
+let fiende1Bredde = 34
+let fiende1Img;
+
+let fiende2Bredde = 69
+let fiende2Img;
+
+let fiende3Bredde = 102
+let fiende3Img;
+
+
+let fiendeHoyde = 70
+
+let fiendeX = 700
+let fiendeY = brettHoyde - fiendeHoyde
 //#endregion
 
 //#region Elementer
@@ -134,50 +163,36 @@ function oppdaterSpill() {
   requestAnimationFrame(oppdaterSpill);
 }
 
-/**
- * Plasserer en fiende på skjermen med en tilfeldig sjanse for størrelse.
- * Endrer:
- * - Legger til et fiendeobjekt i fienderArray med egenskaper img, x, y, width, height basert på en tilfeldig sjanse.
- * 
- * Sjanser:
- * - 10% sjanse for en stor fiende (fiende3)
- * - 30% sjanse for en medium fiende (fiende2)
- * - 60% sjanse for en liten fiende (fiende1)
- * 
- */
-function plasserFiende() {
+function lagFiender() {
   let fiende = {
-    img : null,
-    x : fiendeX,
-    y : fiendeY,
-    width : null,
-    height : fiendeHoyde
-  }
-
-  let spawnSjanse = Math.floor(Math.random() * 10 + 1)
-
-  if(spawnSjanse > 9){         //10% sjanse for en stor fiende
+      img : null,
+      x : fiendeX,
+      y : fiendeY,
+      width : null,
+      height : fiendeHoyde
+    }
+  
+  let spawnSjanse = Math.floor(Math.random * 10 + 1)
+  
+  if(spawnSjanse > 9){    //10% sjanse for en stor fiende
     fiende.img = fiende3Img;
     fiende.width = fiende3Bredde
     fienderArray.push(fiende)
-  }
-   else if (spawnSjanse >= 7){    //30% sjanse for en medium fiende
+  } else if (spawnSjanse >= 7){    //30% sjanse for en medium fiende
     fiende.img = fiende2Img;
     fiende.width = fiende2Bredde
     fienderArray.push(fiende)
-  }
-   else if (spawnSjanse <= 6){    //60% sjanse for en liten fiende
+  } else if (spawnSjanse <= 6){   //60% sjansse for en liten fiende
     fiende.img = fiende1Img;
     fiende.width = fiende1Bredde
     fienderArray.push(fiende)
   }
-}
 
+  if(fienderArray.length > 5){
+    fienderArray.shift(); //Fjerner fienden som er forran i Arrayen, sånn at den ikke blir for stor
+  }
+};
 
-/**
- * Sjekker for kollisjon mellom spilleren og fiender.
- * 
- */
 function kollisjon() {
   for(let i = 0; i < fienderArray.length; i++){
     let fiende = fienderArray[i];

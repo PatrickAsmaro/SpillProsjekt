@@ -10,10 +10,11 @@ let brettBredde = 750;
 let brettHoyde = 250;
 
 //Spillkarakter
-let karakterBredde = 80
-let karakterHoyde = 86
-let karakterX = 50
-let karakterY = brettHoyde - karakterY;
+let karakterBredde = 80;
+let karakterHoyde = 86;
+let karakterX = 50;
+//let karakterY = 0; feil
+
 let karakterImg;
 
 let karakterer = [
@@ -23,7 +24,6 @@ let karakterer = [
 ];
 
 //fiender
-let fienderArray = []
 let fiende1Bredde = 34
 let fiende1Img;
 
@@ -37,7 +37,13 @@ let fiende3Img;
 let fiendeHoyde = 70
 
 let fiendeX = 700
-let fiendeY = brettHoyde - fiendeHoyde
+let fiendeY = brettHoyde - fiendeHoydeks
+
+let fienderArray = [
+  {nr : "1", bredde: 34, hoyde: 70, x: fiendeX, y: fiendeY, img: "../Bilder/fiende1.png"},
+  {nr : "2", bredde: 69, hoyde: 70, x: fiendeX, y: fiendeY, img: "../Bilder/fiende2.png"},
+  {nr : "3", bredde: 102, hoyde: 70, x: fiendeX, y: fiendeY, img: "../Bilder/fiende3.png"}
+];
 //#endregion
 
 //#region Elementer

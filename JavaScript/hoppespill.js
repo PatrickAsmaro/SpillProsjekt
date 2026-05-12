@@ -87,6 +87,13 @@ function hopp(event) {
   }
 }
 
+/**
+ * Oppdaterer spillet ved å flytte karakteren opp eller ned.
+ * Funksjonen bruker fartY og y for å regne ut hopp og landing.
+ * Hvis karakteren treffer bakken, settes y til 0 og paaBakken til true.
+ * Flytter aktivKarakter ved å endre style.bottom.
+ * Returnerer ingen verdi.
+ */
 function oppdaterSpill() {
   fartY = fartY - 1;
   y = y + fartY;

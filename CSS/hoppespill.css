@@ -53,5 +53,5 @@
   height: 1080px;
 
   position: absolute;
-  z-index: 0;
+  overflow: hidden;
 }

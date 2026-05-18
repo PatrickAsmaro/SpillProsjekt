@@ -11,12 +11,12 @@ let fienderAktiv = [];
 let fiendeTeller = 0;
 
 // Brett
-const brettBredde = 1000;
-const brettHoyde  = 250;
+const brettBredde = 1200;
+const brettHoyde  = 300;
 
 // Bakgrunner
 const bakgrunn = {
-  1: "../Bilder/bakgrunn.jpg",
+  1: "../Bilder/Aysa Bakgrunn.png",
   2: "../Bilder/bakgrunn2.jpg",
   3: "../Bilder/bakgrunn3.jpg"
 };
@@ -27,12 +27,13 @@ const karakterHoyde  = 120;
 const karakterX      = 50;
 
 const karakterer = [
-  { navn: "test",      evne: "evne1", liv: 3, bilde: "../Bilder/testKarakter.jpg" },
+  { navn: "Aysa",      evne: "sakteTid", liv: 3, bilde: "../Bilder/Aysa.png" },
   { navn: "karakter2", evne: "evne2", liv: 3, bilde: "bildeSti" },
   { navn: "karakter3", evne: "evne3", liv: 3, bilde: "bildeSti" }
 ];
 
 // Fiender
+
 const fiendeIntervall = 120; // Ny fiende hvert 120. frame (ca. 2 sekunder)
 const fiendeStartX    = brettBredde - 50;
 const fiendeStartY    = 0; // Justert for fiendehøyde
@@ -43,6 +44,11 @@ const fiendeMaler = [
   { bredde: 120, hoyde: 85, img: "../Bilder/troll.jpg" }  // stor   – 10%
 ];
 
+// Fiender – fart
+const fiendeFartMin = 3;   // Laveste mulige fart ved start
+const fiendeFartMax = 7;   // Høyeste mulige fart
+let fiendeFartOkning = 0;  // Øker over tid for å gjøre spillet vanskeligere
+
 //#endregion
 
 
@@ -50,6 +56,7 @@ const fiendeMaler = [
 let bodyEl       = document.querySelector("body");
 let startKnappEl = document.querySelector("#startKnapp");
 let startMenyEl  = document.querySelector("#startSide");
+let spillflateEl = document.querySelector("#spillflate");
 //#endregion
 
 
@@ -73,7 +80,7 @@ function startSpill() {
   for (let i = 0; i < karakterer.length; i++) {
     kobleBildeTilDiv(karakterer[i]);
   }
-
+ settBakgrunn(1);
   visDiv(karakterer[0]);
   aktivKarakter = document.querySelector("#" + karakterer[0].navn);
   oppdaterSpill();
@@ -134,6 +141,7 @@ function hopp(event) {
 /**
  * Lager en ny aktiv fiende basert på tilfeldighet og legger den til fienderAktiv.
  * 10% sjanse: stor, 30% sjanse: medium, 60% sjanse: liten.
+ * Farten er tilfeldig mellom fiendeFartMin + fiendeFartOkning og fiendeFartMax.
  * Fjerner eldste fiende hvis listen overstiger 5.
  */
 function lagFiende() {
@@ -141,19 +149,23 @@ function lagFiende() {
 
   let mal;
   if (spawnSjanse > 9) {
-    mal = fiendeMaler[2];      // 10% – stor
+    mal = fiendeMaler[2];
   } else if (spawnSjanse >= 7) {
-    mal = fiendeMaler[1];      // 30% – medium
+    mal = fiendeMaler[1];
   } else {
-    mal = fiendeMaler[0];      // 60% – liten
+    mal = fiendeMaler[0];
   }
+
+  let nedreGrense = fiendeFartMin + fiendeFartOkning;
+  let fart = nedreGrense + Math.random() * (fiendeFartMax - nedreGrense);
 
   fienderAktiv.push({
     img:    mal.img,
     x:      fiendeStartX,
     y:      fiendeStartY,
     width:  mal.bredde,
-    height: mal.hoyde
+    height: mal.hoyde,
+    fart:   fart
   });
 
   if (fienderAktiv.length > 5) {
@@ -214,8 +226,14 @@ function kollisjon() {
     }
   }
 }
-
-
+/**
+ * Setter bakgrunnen til spillet basert på det gitte nummeret.
+ * @param {number} bakgrunnsNummer - Nummeret på den ønskede bakgrunnen
+ */
+function settBakgrunn(bakgrunnsNummer) {
+  let bakgrunnUrl = bakgrunn[bakgrunnsNummer];
+  spillflateEl.style.backgroundImage = "url('" + bakgrunnUrl + "')";
+}
 // --- Spilløkke ---
 
 /**
@@ -244,7 +262,7 @@ function oppdaterSpill() {
 
   // Fiender – flytt og rydd
   for (let i = 0; i < fienderAktiv.length; i++) {
-    fienderAktiv[i].x -= fiendeFart;
+    fienderAktiv[i].x -= fienderAktiv[i].fart;  // Bruker fiendens egen fart
 
     if (fienderAktiv[i].x + fienderAktiv[i].width < 0) {
       fienderAktiv.splice(i, 1);
@@ -257,8 +275,13 @@ function oppdaterSpill() {
   if (fiendeTeller >= fiendeIntervall) {
     lagFiende();
     fiendeTeller = 0;
-  }
 
+    // Øk nedre grense litt for hver spawn, men aldri over maks
+    fiendeFartOkning = Math.min(
+      fiendeFartOkning + 0.3,
+      fiendeFartMax - fiendeFartMin
+    );
+  }
   // Kollisjon og tegning
   kollisjon();
   tegnFiender();

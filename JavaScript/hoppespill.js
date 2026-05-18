@@ -1,45 +1,53 @@
 //#region Globale Variabler
+
+// Hopp
 let y = 0;
 let fartY = 0;
 let paaBakken = true;
+
+// Spill
 let aktivKarakter;
 let fienderAktiv = [];
+let fiendeTeller = 0;
 
-let bakgrunn = {
-  1: "../Bilder/bakgrunn1.jpg",
+// Brett
+const brettBredde = 1000;
+const brettHoyde  = 250;
+
+// Bakgrunner
+const bakgrunn = {
+  1: "../Bilder/bakgrunn.jpg",
   2: "../Bilder/bakgrunn2.jpg",
   3: "../Bilder/bakgrunn3.jpg"
 };
 
-// Spillbrett
-let brettBredde = 750;
-let brettHoyde = 250;
+// Karakter
+const karakterBredde = 100;
+const karakterHoyde  = 120;
+const karakterX      = 50;
 
-// Spillkarakter
-let karakterBredde = 80;
-let karakterHoyde = 86;
-let karakterX = 50;
-
-let karakterer = [
-  { navn: "test",       evne: "evne1", liv: 3, bilde: "../Bilder/testKarakter.jpg" },
-  { navn: "karakter2",  evne: "evne2", liv: 3, bilde: "bildeSti" },
-  { navn: "karakter3",  evne: "evne3", liv: 3, bilde: "bildeSti" }
+const karakterer = [
+  { navn: "test",      evne: "evne1", liv: 3, bilde: "../Bilder/testKarakter.jpg" },
+  { navn: "karakter2", evne: "evne2", liv: 3, bilde: "bildeSti" },
+  { navn: "karakter3", evne: "evne3", liv: 3, bilde: "bildeSti" }
 ];
 
-// Fiende-typer (maler, skal ikke endres under spill)
+// Fiender
+const fiendeIntervall = 120; // Ny fiende hvert 120. frame (ca. 2 sekunder)
+const fiendeStartX    = brettBredde - 50;
+const fiendeStartY    = 0; // Justert for fiendehøyde
+const fiendeFart      = 5;
 const fiendeMaler = [
-  { bredde: 34,  hoyde: 70, img: "../Bilder/fiende1.png" }, // liten  – 60%
-  { bredde: 69,  hoyde: 70, img: "../Bilder/fiende2.png" }, // medium – 30%
-  { bredde: 102, hoyde: 70, img: "../Bilder/fiende3.png" }  // stor   – 10%
+  { bredde: 40,  hoyde: 85, img: "../Bilder/skelett.jpg" }, // liten  – 60%
+  { bredde: 70,  hoyde: 85, img: "../Bilder/slim.jpg" }, // medium – 30%
+  { bredde: 120, hoyde: 85, img: "../Bilder/troll.jpg" }  // stor   – 10%
 ];
 
-const fiendeStartX = brettBredde - 50;
-const fiendeStartY = brettHoyde - 70;
 //#endregion
 
 
 //#region Elementer
-let bodyEl      = document.querySelector("body");
+let bodyEl       = document.querySelector("body");
 let startKnappEl = document.querySelector("#startKnapp");
 let startMenyEl  = document.querySelector("#startSide");
 //#endregion
@@ -51,6 +59,8 @@ startKnappEl.addEventListener("click", startSpill);
 
 
 //#region Funksjoner
+
+// --- Oppstart ---
 
 /**
  * Starter spillet ved å skjule startmenyen, legge til keydown-lytter for hopp,
@@ -70,6 +80,8 @@ function startSpill() {
 }
 
 
+// --- Karakter ---
+
 /**
  * Kobler et bilde til et div-element basert på karakterobjektet.
  * Oppretter ikke ny div hvis den allerede finnes.
@@ -80,7 +92,9 @@ function kobleBildeTilDiv(obj) {
 
   let div = document.createElement("div");
   div.id = obj.navn;
-  div.style.cssText = "display:none; position:absolute; bottom:0px; left:" + karakterX + "px;";
+  div.style.cssText =
+    "display:none; position:absolute;" +
+    "bottom:0px; left:" + karakterX + "px;";
 
   let img = document.createElement("img");
   img.src = obj.bilde;
@@ -90,7 +104,6 @@ function kobleBildeTilDiv(obj) {
   div.appendChild(img);
   bodyEl.appendChild(div);
 }
-
 
 /**
  * Gjør div-elementet til obj synlig.
@@ -103,7 +116,6 @@ function visDiv(obj) {
   }
 }
 
-
 /**
  * Starter et hopp når mellomromstasten trykkes og karakteren er på bakken.
  * @param {KeyboardEvent} event - Tastetrykk-hendelsen fra nettleseren
@@ -111,18 +123,112 @@ function visDiv(obj) {
 function hopp(event) {
   if (event.code === "Space" && paaBakken) {
     event.preventDefault();
-    fartY = 15;
+    fartY = 30;
     paaBakken = false;
   }
 }
 
 
+// --- Fiender ---
+
 /**
- * Oppdaterer spillet ved å flytte karakteren opp eller ned.
- * Bruker fartY og y for å beregne hopp og landing.
+ * Lager en ny aktiv fiende basert på tilfeldighet og legger den til fienderAktiv.
+ * 10% sjanse: stor, 30% sjanse: medium, 60% sjanse: liten.
+ * Fjerner eldste fiende hvis listen overstiger 5.
+ */
+function lagFiende() {
+  let spawnSjanse = Math.floor(Math.random() * 10 + 1);
+
+  let mal;
+  if (spawnSjanse > 9) {
+    mal = fiendeMaler[2];      // 10% – stor
+  } else if (spawnSjanse >= 7) {
+    mal = fiendeMaler[1];      // 30% – medium
+  } else {
+    mal = fiendeMaler[0];      // 60% – liten
+  }
+
+  fienderAktiv.push({
+    img:    mal.img,
+    x:      fiendeStartX,
+    y:      fiendeStartY,
+    width:  mal.bredde,
+    height: mal.hoyde
+  });
+
+  if (fienderAktiv.length > 5) {
+    fienderAktiv.shift();
+  }
+}
+
+/**
+ * Tegner alle aktive fiender på skjermen.
+ * Fjerner gamle fiende-elementer og oppretter nye basert på fienderAktiv.
+ */
+function tegnFiender() {
+  let gamleFiender = document.querySelectorAll(".fiende");
+  for (let i = 0; i < gamleFiender.length; i++) {
+    gamleFiender[i].remove();
+  }
+
+  for (let i = 0; i < fienderAktiv.length; i++) {
+    let fiende = fienderAktiv[i];
+
+    let img = document.createElement("img");
+    img.src = fiende.img;
+    img.alt = "fiende";
+    img.className = "fiende";
+    img.style.cssText =
+      "position:absolute;" +
+      "left:"   + fiende.x      + "px;" +
+      "bottom:" + fiende.y      + "px;" +
+      "width:"  + fiende.width  + "px;" +
+      "height:" + fiende.height + "px;";
+
+    bodyEl.appendChild(img);
+  }
+}
+
+/**
+ * Sjekker om aktivKarakter kolliderer med en fiende i fienderAktiv.
+ * Fjerner fienden og logger kollisjon hvis treff oppdages.
+ */
+function kollisjon() {
+  let karakterVenstre = karakterX;
+  let karakterHoyre   = karakterX + karakterBredde;
+  let karakterTopp    = y + karakterHoyde;
+
+  for (let i = 0; i < fienderAktiv.length; i++) {
+    let f = fienderAktiv[i];
+    let treffer =
+      f.x              < karakterHoyre  &&
+      f.x + f.width    > karakterVenstre &&
+      f.y              < karakterTopp   &&
+      f.y + f.height   > y;
+
+    if (treffer) {
+      console.log("Kollisjon med fiende!");
+      fienderAktiv.splice(i, 1);
+      aktivKarakter.liv--;
+      i--;
+    }
+  }
+}
+
+
+// --- Spilløkke ---
+
+/**
+ * Oppdaterer spillet for hver frame:
+ * - Hopp og landing for karakter
+ * - Fiender flyttes mot venstre og ryddes opp
+ * - Ny fiende spawnes med jevne mellomrom
+ * - Kollisjon sjekkes
+ * - Fiender tegnes
  * Returnerer ingen verdi.
  */
 function oppdaterSpill() {
+  // Hopp
   fartY -= 1;
   y += fartY;
 
@@ -136,66 +242,28 @@ function oppdaterSpill() {
     aktivKarakter.style.bottom = y + "px";
   }
 
-  requestAnimationFrame(oppdaterSpill);
-}
-
-
-/**
- * Lager en ny aktiv fiende basert på tilfeldighet og legger den til fienderAktiv.
- * 10% sjanse: stor fiende, 30% sjanse: medium fiende, 60% sjanse: liten fiende.
- * Fjerner den eldste fienden hvis listen overstiger 5 elementer.
- */
-function lagFiende() {
-  let spawnSjanse = Math.floor(Math.random() * 10 + 1);
-
-  let mal;
-  if (spawnSjanse > 9) {
-    mal = fiendeMaler[2];       // 10% – stor
-  } else if (spawnSjanse >= 7) {
-    mal = fiendeMaler[1];       // 30% – medium
-  } else {
-    mal = fiendeMaler[0];       // 60% – liten
-  }
-
-  let fiende = {
-    img:    mal.img,
-    x:      fiendeStartX,
-    y:      fiendeStartY,
-    width:  mal.bredde,
-    height: mal.hoyde
-  };
-
-  fienderAktiv.push(fiende);
-
-  if (fienderAktiv.length > 5) {
-    fienderAktiv.shift();
-  }
-}
-
-
-/**
- * Sjekker om aktivKarakter kolliderer med en fiende i fienderAktiv.
- * Fjerner fienden og logger kollisjon hvis treff oppdages.
- */
-function kollisjon() {
-  let karakterVenstre = karakterX;
-  let karakterHoyre   = karakterX + karakterBredde;
-  let karakterTopp    = y + karakterHoyde;
-
+  // Fiender – flytt og rydd
   for (let i = 0; i < fienderAktiv.length; i++) {
-    let fiende = fienderAktiv[i];
-    let treffer =
-      fiende.x < karakterHoyre &&
-      fiende.x + fiende.width > karakterVenstre &&
-      fiende.y < karakterTopp &&
-      fiende.y + fiende.height > y;
+    fienderAktiv[i].x -= fiendeFart;
 
-    if (treffer) {
-      console.log("Kollisjon med fiende!");
+    if (fienderAktiv[i].x + fienderAktiv[i].width < 0) {
       fienderAktiv.splice(i, 1);
       i--;
     }
   }
+
+  // Spawn
+  fiendeTeller++;
+  if (fiendeTeller >= fiendeIntervall) {
+    lagFiende();
+    fiendeTeller = 0;
+  }
+
+  // Kollisjon og tegning
+  kollisjon();
+  tegnFiender();
+
+  requestAnimationFrame(oppdaterSpill);
 }
 
 //#endregion

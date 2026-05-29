@@ -16,10 +16,11 @@ const brettHoyde  = 300;
 
 // Bakgrunner
 const bakgrunn = {
-  1: "../Bilder/Aysa Bakgrunn.png",
+  1: "../Bilder/AysaBakgrunn.png",
   2: "../Bilder/bakgrunn2.jpg",
   3: "../Bilder/bakgrunn3.jpg"
 };
+
 
 // Karakter
 const karakterBredde = 100;
@@ -80,10 +81,10 @@ function startSpill() {
   for (let i = 0; i < karakterer.length; i++) {
     kobleBildeTilDiv(karakterer[i]);
   }
- settBakgrunn(1);
   visDiv(karakterer[0]);
   aktivKarakter = document.querySelector("#" + karakterer[0].navn);
   oppdaterSpill();
+   settBakgrunn(1);
 }
 
 
@@ -231,8 +232,7 @@ function kollisjon() {
  * @param {number} bakgrunnsNummer - Nummeret på den ønskede bakgrunnen
  */
 function settBakgrunn(bakgrunnsNummer) {
-  let bakgrunnUrl = bakgrunn[bakgrunnsNummer];
-  spillflateEl.style.backgroundImage = "url('" + bakgrunnUrl + "')";
+  spillflateEl.style.backgroundImage = `url(${bakgrunn[bakgrunnsNummer]})`;
 }
 // --- Spilløkke ---
 

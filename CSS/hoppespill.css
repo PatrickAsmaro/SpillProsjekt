@@ -54,4 +54,5 @@
 
   position: absolute;
   overflow: hidden;
+  z-index: -1;
 }

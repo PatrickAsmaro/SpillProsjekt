@@ -17,8 +17,8 @@ const brettHoyde  = 300;
 // Bakgrunner
 const bakgrunn = {
   1: "../Bilder/AysaBakgrunn.png",
-  2: "../Bilder/bakgrunn2.jpg",
-  3: "../Bilder/bakgrunn3.jpg"
+  2: "../Bilder/AureliaBakgrunn.png",
+  3: "../Bilder/bakgrunn3.png"
 };
 
 
@@ -29,8 +29,8 @@ const karakterX      = 50;
 
 const karakterer = [
   { navn: "Aysa",      evne: "sakteTid", liv: 3, bilde: "../Bilder/Aysa.png" },
-  { navn: "karakter2", evne: "evne2", liv: 3, bilde: "bildeSti" },
-  { navn: "karakter3", evne: "evne3", liv: 3, bilde: "bildeSti" }
+  { navn: "Aurelia", evne: "hoppeHoeyere", liv: 3, bilde: "../Bilder/Aurelia.png" },
+  { navn: "karakter3", evne: "evne3", liv: 3, bilde: "../Bilder/karakter3.png" }
 ];
 
 // Fiender
@@ -39,10 +39,16 @@ const fiendeIntervall = 120; // Ny fiende hvert 120. frame (ca. 2 sekunder)
 const fiendeStartX    = brettBredde - 50;
 const fiendeStartY    = 0; // Justert for fiendehøyde
 const fiendeFart      = 5;
-const fiendeMaler = [
-  { bredde: 40,  hoyde: 85, img: "../Bilder/skelett.jpg" }, // liten  – 60%
-  { bredde: 70,  hoyde: 85, img: "../Bilder/slim.jpg" }, // medium – 30%
-  { bredde: 120, hoyde: 85, img: "../Bilder/troll.jpg" }  // stor   – 10%
+const aysaFiendeMaler = [
+  { bredde: 40,  hoyde: 85, img: "../Bilder/AysaFiende1.png" }, // liten  – 60%
+  { bredde: 70,  hoyde: 85, img: "../Bilder/AysaFiende2.png" }, // medium – 30%
+  { bredde: 120, hoyde: 85, img: "../Bilder/AysaFiende3.png" }  // stor   – 10%
+];
+
+const aureliaFiendeMaler = [
+  { bredde: 40,  hoyde: 85, img: "../Bilder/AureliaFiende1.png" }, // liten  – 60%
+  { bredde: 70,  hoyde: 85, img: "../Bilder/AureliaFiende2.png" }, // medium – 30%
+  { bredde: 120, hoyde:85, img: "../Bilder/AureliaFiende3.png" }  // stor   – 10%
 ];
 
 // Fiender – fart
@@ -131,7 +137,7 @@ function visDiv(obj) {
 function hopp(event) {
   if (event.code === "Space" && paaBakken) {
     event.preventDefault();
-    fartY = 30;
+    fartY = 25;
     paaBakken = false;
   }
 }
@@ -145,7 +151,7 @@ function hopp(event) {
  * Farten er tilfeldig mellom fiendeFartMin + fiendeFartOkning og fiendeFartMax.
  * Fjerner eldste fiende hvis listen overstiger 5.
  */
-function lagFiende() {
+function lagFiende(fiendeMaler) {
   let spawnSjanse = Math.floor(Math.random() * 10 + 1);
 
   let mal;
@@ -273,7 +279,7 @@ function oppdaterSpill() {
   // Spawn
   fiendeTeller++;
   if (fiendeTeller >= fiendeIntervall) {
-    lagFiende();
+    lagFiende(aysaFiendeMaler);
     fiendeTeller = 0;
 
     // Øk nedre grense litt for hver spawn, men aldri over maks

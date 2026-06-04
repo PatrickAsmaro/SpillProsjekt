@@ -1,0 +1,75 @@
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: black;
+}
+
+#spillflate {
+  position: relative;
+  width: min(100vw, 1200px);
+  aspect-ratio: 4 / 1;
+  height: 600px;
+  overflow: hidden;
+
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: 100% 100%;
+}
+
+#startSide {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-image: url('../Bilder/startside.png');
+  background-size: cover;
+}
+
+#startKnapp {
+  margin: 20px;
+  padding: 15px;
+  background-color: yellow;
+  border: none;
+  border-radius: 20%;
+  font-size: large;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#startHolder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 600px;
+  padding: 20px;
+}
+
+#keybinds {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+#startInfo {
+  background-color: rgba(211, 211, 211, 0.448);
+  border-radius: 13%;
+  padding: 5px;
+  text-align: center;
+}

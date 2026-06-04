@@ -73,3 +73,18 @@ body {
   padding: 5px;
   text-align: center;
 }
+
+#space{
+  background-color: white;
+  border-radius: 7px;
+  padding: 7px;
+}
+
+#poeng{
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-weight: bold;
+  font-size:xx-large;
+}

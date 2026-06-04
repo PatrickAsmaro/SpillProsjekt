@@ -230,7 +230,11 @@ function kollisjon() {
       fienderAktiv.splice(i, 1);
       aktivKarakter.liv--;
       i--;
-    }
+
+      if (aktivKarakter.liv <= 0) {
+        sluttSpill();
+      }
+      i--;    }
   }
 }
 /**
@@ -269,7 +273,6 @@ function oppdaterSpill() {
   // Fiender – flytt og rydd
   for (let i = 0; i < fienderAktiv.length; i++) {
     fienderAktiv[i].x -= fienderAktiv[i].fart;  // Bruker fiendens egen fart
-
     if (fienderAktiv[i].x + fienderAktiv[i].width < 0) {
       fienderAktiv.splice(i, 1);
       i--;
@@ -295,4 +298,25 @@ function oppdaterSpill() {
   requestAnimationFrame(oppdaterSpill);
 }
 
+/**
+ * Går videre til neste level ved å sjekke hvilken karakter som er aktiv og oppdatere bakgrunn og karakter deretter.
+ * Hvis Aysa er aktiv, byttes til Aurelia og bakgrunn 2. Hvis Aurelia er aktiv, byttes til karakter3 og bakgrunn 3.
+ * Returnerer ingen verdi.
+ */
+function nesteLevel() {
+  if (aktivKarakter.navn === "Aysa") {
+    settBakgrunn(2);
+    aktivKarakter = document.querySelector("#" + karakterer[1].navn);
+    visDiv(karakterer[1]);
+    
+  } else if (aktivKarakter.navn === "Aurelia") {
+    settBakgrunn(3);
+    aktivKarakter = document.querySelector("#" + karakterer[2].navn);
+    visDiv(karakterer[2]);
+  }
+}
+
+function sluttSpill() {
+  location.reload();
+}
 //#endregion

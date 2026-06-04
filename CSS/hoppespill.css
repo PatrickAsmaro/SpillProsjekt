@@ -46,7 +46,7 @@ body {
   padding: 15px;
   background-color: yellow;
   border: none;
-  border-radius: 20%;
+  border-radius: 10px;
   font-size: large;
   font-weight: bold;
   cursor: pointer;
